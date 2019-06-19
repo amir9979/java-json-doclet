@@ -9,33 +9,39 @@ public class DocletOption
 {
     public static int getOptionLength(String option)
     {
-        if("-ofile".equals(option))
+	String[] options = {"-d", "-bottom", "-author", "-charset", "-windowtitle", "-header", "-footer", "-top", "-link", "-docencoding", "-doctitle"};
+		for( String str : options){
+        if(str.equals(option))
         {
             return 2;
         }
-        else if("-append".equals(option))
+		} 
+		
+	String[] options2 = {"-use", "-append", "-pretty", "-version"};
+		for( String str : options2){
+        if(str.equals(option))
         {
             return 1;
         }
-        else if("-pretty".equals(option))
-        {
-            return 1;
-        }
-        else
-        {
+		}
+		if ("-linkoffline".equals(option)){
+			return 3;
+		}
+        
             return 0;
-        }
+		
     }
 
     public DocletOption(String[][] options)
     {
         for(final String[] pair : options)
         {
-            if("-ofile".equals(pair[0]))
+           if("-d".equals(pair[0]))
             {
-                this.outputFilename = new File( pair[1]);
-            }
-            else if("-append".equals(pair[0]))
+                this.outputFilename = new File( pair[1]+"\\all_data.json");
+		
+            } else 
+            if("-append".equals(pair[0]))
             {
                 this.appendMode = true;
             }
@@ -45,16 +51,12 @@ public class DocletOption
             }
         }
 
-        if(this.outputFilename == null)
-        {
-            throw new IllegalArgumentException("missing `-ofile' argument.");
-        }
     }
 
     public OutputStream openOutputStream()
         throws IOException
     {
-        return new FileOutputStream(this.outputFilename, this.appendMode);
+        return new FileOutputStream(this.outputFilename, true);
     }
 
     public boolean isPretty()
